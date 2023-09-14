@@ -29,14 +29,14 @@ rmvCidade cidade = cidade
 --     | cidadeAlvo == nome = (nome, True)
 --     | otherwise = (nome, False)
 
-encontraPosCidade :: Cidade -> Int
-encontraPosCidade (cidade, coordenadas, estradas)
-    | ps == [] = 0
+salvarEstrada :: Cidade -> Estradas -> Cidade
+salvarEstrada (cidade, coordenadas, estradas) novaEstrada
+    | ps == [] = ("",(0,0),[""])
     |otherwise = head ps
-    where ps = [(cidade2, coordenadas2, estradas2) | (cidade2, coordenadas2, estradas2)<-loadMapa, (cidade2 == cidade && coordenadas2 == coordenadas && estradas2 == estradas)]
+    where ps = [(cidade2, coordenadas2, estradas2++novaEstrada) | (cidade2, coordenadas2, estradas2)<-loadMapa, (cidade2 == cidade && coordenadas2 == coordenadas && estradas2 == estradas)]
 
-adcEstrada :: NomeCidade -> Estradas -> Int
-adcEstrada cidade estradas = encontraPosCidade (snd (rodarMapa cidade mapa))
+adcEstrada :: NomeCidade -> Estradas -> Cidade
+adcEstrada cidade estradas = salvarEstrada (snd (rodarMapa cidade mapa)) estradas
     where mapa = loadMapa
 
 rodarMapa :: NomeCidade -> Mapa -> (Bool, Cidade)
