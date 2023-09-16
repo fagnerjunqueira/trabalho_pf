@@ -10,8 +10,12 @@ exibirMapa = []
 adcCidade :: Cidade -> Cidade
 adcCidade cidade = cidade
 
+-- Comentário de Matheus: Acredito que a função abaixo adicione a cidade ao invés de remover
 rmvCidade :: Cidade -> Cidade
 rmvCidade cidade = cidade
+-- Função de Matheus para remover cidade (Ainda sem remoção das vizinhanças)
+removeCidade :: Cidade -> Mapa -> Mapa
+removeCidade cidade1 mapa = (filter (\x -> x/=cidade1) mapa)
 
 -- Adicionar estrada
 salvarEstrada :: Cidade -> Rotas -> Cidade
