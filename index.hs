@@ -18,16 +18,6 @@ rmvCidade :: Cidade -> Cidade
 rmvCidade cidade = cidade
 
 -- Adicionar estrada
--- adcEstrada :: NomeCidade -> Estradas -> NomeCidade
--- adcEstrada cidade estradas
---     | buscarCidade dados = 
---     | otherwise = adcEstrada cidade estradas
---     where mapa = loadMapa; dados = mapa!!0
-
--- buscarCidade :: Cidade -> Cidade -> (Cidade -> Bool)
--- buscarCidade cidadeAlvo (nome, coordenadas, estradas)
---     | cidadeAlvo == nome = (nome, True)
---     | otherwise = (nome, False)
 
 salvarEstrada :: Cidade -> Estradas -> Cidade
 salvarEstrada (cidade, coordenadas, estradas) novaEstrada
