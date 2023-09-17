@@ -1,39 +1,54 @@
 import Mapa
 
-loadMapa :: Mapa
-loadMapa = [("Aracaju", (10.0,11.0), ["Recife", "Maceio"]), ("Maceio", (10.0,11.0), ["Recife", "Aracaju"]), ("Recife", (10.0,11.0), ["Aracaju", "Maceio"])]
+adcEstrada :: IO ()
+adcEstrada = do
+    putStrLn "Informe o nome do arquivo de mapa:"
+    loadMapa <- carregarMapa "teste.mapa"
+    putStrLn "Informe a cidade que recebera as estradas:"
+    cidadeQueRecebe <- getLine
+    putStrLn "Digite as novas estradas separadas por espaco:"
+    listaRotas <- getLine
+    let listaFinalDeRotas = words listaRotas
 
--- Função mapa vazio
-exibirMapa :: Mapa
-exibirMapa = []
+    -- Adicionar estrada
+    let colocarEstrada :: Mapa -> Mapa
+        colocarEstrada [] = []
+        colocarEstrada ((cidade, localizacao, rotas):xs)
+            | rotas == [] = []
+            | cidade == cidadeQueRecebe = [(cidade, localizacao, rotas++listaFinalDeRotas)] ++ colocarEstrada xs
+            | otherwise = [(cidade, localizacao, rotas)] ++ colocarEstrada xs
 
-adcCidade :: Cidade -> Cidade
-adcCidade cidade = cidade
+    let novoMapa = colocarEstrada loadMapa
 
--- Comentário de Matheus: Acredito que a função abaixo adicione a cidade ao invés de remover
-rmvCidade :: Cidade -> Cidade
-rmvCidade cidade = cidade
--- Função de Matheus para remover cidade (Ainda sem remoção das vizinhanças)
-removeCidade :: Cidade -> Mapa -> Mapa
-removeCidade cidade1 mapa = (filter (\x -> x/=cidade1) mapa)
+    salvarMapa novoMapa "saida.mapa"
 
--- Adicionar estrada
-salvarEstrada :: Cidade -> Rotas -> Cidade
-salvarEstrada (cidade, localizacao, rotas) novaEstrada
-    | ps == [] = ("",(0,0),[""])
-    |otherwise = head ps
-    where ps = [(cidade2, localizacao2, rotas2++novaEstrada) | (cidade2, localizacao2, rotas2)<-loadMapa, (cidade2 == cidade && localizacao2 == localizacao && rotas2 == rotas)]
+    print novoMapa
 
-adcEstrada :: Nome -> Rotas -> Cidade
-adcEstrada cidade rotas = salvarEstrada (snd (rodarMapa cidade mapa)) rotas
-    where mapa = loadMapa
+rmvEstrada :: IO ()
+rmvEstrada = do
+    putStrLn "Informe o nome do arquivo de mapa:"
+    loadMapa <- carregarMapa "teste.mapa"
+    putStrLn "Informe a cidade que perdera a estrada:"
+    cidadeAlvo <- getLine
+    putStrLn "Digite a estrada que sera removida:"
+    estradaQuePerde <- getLine
 
-rodarMapa :: Nome -> Mapa -> (Bool, Cidade)
-rodarMapa cidadeAlvo (x:xs)
-    | fst (buscarCidade cidadeAlvo x) = (True, x)
-    | otherwise = rodarMapa cidadeAlvo xs
+    let removido :: Rotas -> Rotas
+        removido [] = []
+        removido (rotas:xs)
+            | rotas == [] = []
+            | rotas == estradaQuePerde = removido xs
+            | otherwise = removido xs ++ [rotas]
 
-buscarCidade :: Nome -> Cidade -> (Bool, Cidade)
-buscarCidade cidadeAlvo (cidade, localizacao, rotas)
-    | cidadeAlvo == cidade = (True, (cidade, localizacao, rotas))
-    | otherwise = (False, (cidade, localizacao, rotas))
+    let tirarEstrada :: Mapa -> Mapa
+        tirarEstrada [] = []
+        tirarEstrada ((cidade, localizacao, rotas):xs)
+            | rotas == [] = []
+            | cidade == cidadeAlvo = [(cidade, localizacao, (removido rotas))] ++ tirarEstrada xs
+            | otherwise = [(cidade, localizacao, rotas)] ++ tirarEstrada xs
+
+    let novoMapa = tirarEstrada loadMapa 
+
+    salvarMapa novoMapa "saida.mapa"
+
+    print novoMapa
