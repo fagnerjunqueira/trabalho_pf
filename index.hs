@@ -1,5 +1,8 @@
 import Mapa
 
+showMapa :: Mapa
+showMapa = [("",(0,0),[""])]
+
 adcEstrada :: IO ()
 adcEstrada = do
     putStrLn "Informe o nome do arquivo de mapa:"
