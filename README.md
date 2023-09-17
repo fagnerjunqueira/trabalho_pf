@@ -1,5 +1,22 @@
 # Trabalho Programação Funcional
 
+## Instruções de uso
+
+### Adicionar uma cidade
+- Chame a função ``rmvCidade``
+
+### Remover uma cidade
+- Chame a função ``rmvCidade``
+
+### Adicionar uma cidade
+- Chame a função ``adcEstrada``
+
+### Remover uma estrada
+- Chame a função ``rmvEstrada``
+
+### Mostrar mapa em branco
+- Chame a função ``showMapa``
+
 ## Requisitos
 
 - Criação dos tipos de dados que representam os mapas, cidades, estradas, e o que mais julgarem
