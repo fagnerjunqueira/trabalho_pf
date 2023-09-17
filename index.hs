@@ -13,9 +13,15 @@ adcCidade cidade = cidade
 -- Comentário de Matheus: Acredito que a função abaixo adicione a cidade ao invés de remover
 rmvCidade :: Cidade -> Cidade
 rmvCidade cidade = cidade
--- Função de Matheus para remover cidade (Ainda sem remoção das vizinhanças)
+-- Função de Matheus para remover cidade (Ainda sem remoção das vizinhanças) (Duas opções)
 removeCidade :: Cidade -> Mapa -> Mapa
 removeCidade cidade1 mapa = (filter (\x -> x/=cidade1) mapa)
+
+remCidade :: Cidade -> Mapa -> Mapa
+remCidade _ [] = []
+remCidade cidade1 (mapa:mapaf)
+                            | cidade1 == mapa = remCidade cidade1 mapaf
+                            | otherwise       = mapa:remCidade cidade1 mapaf
 
 -- Adicionar estrada
 salvarEstrada :: Cidade -> Rotas -> Cidade
