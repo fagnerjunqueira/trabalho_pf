@@ -1,6 +1,0 @@
-Recife, -8.0476, -34.8770, Joao Pessoa, Maceio, Salvador
-Joao Pessoa, -7.1153, -34.8641, Recife, Natal
-Maceio, -9.6658, -35.7351, Recife, Salvador
-Salvador, -12.9716, -38.5019, Recife, Maceio, Aracaju
-Natal, -5.7945, -35.2120, Joao Pessoa
-Aracaju, -10.9472, -37.0731, Salvador
