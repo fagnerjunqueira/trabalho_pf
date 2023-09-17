@@ -7,29 +7,31 @@ main = do
     print (mapaCompleto)
 
     -- Adicionar estrada
-    salvarEstrada :: Cidade -> Rotas -> Cidade
-    salvarEstrada (cidade, localizacao, rotas) novaEstrada
-        | ps == [] = ("",(0,0),[""])
-        | otherwise = head ps
-            where ps = [(cidade2, localizacao2, rotas2++novaEstrada) | (cidade2, localizacao2, rotas2)<-mapaCompleto, (cidade2 == cidade && localizacao2 == localizacao && rotas2 == rotas)]
+rmvEstrada :: IO ()
+rmvEstrada = do
+    putStrLn "Informe o nome do arquivo de mapa:"
+    loadMapa <- carregarMapa "teste.mapa"
+    putStrLn "Informe a cidade que perdera a estrada:"
+    cidadeAlvo <- getLine
+    putStrLn "Digite a estrada que sera removida:"
+    estradaQuePerde <- getLine
 
-    adcEstrada :: Nome -> Rotas -> Cidade
-    adcEstrada cidade rotas = salvarEstrada (snd (rodarMapa cidade mapa)) rotas
-        where mapa = mapaCompleto
+    let removido :: Rotas -> Rotas
+        removido [] = []
+        removido (rotas:xs)
+            | rotas == [] = []
+            | rotas == estradaQuePerde = removido xs
+            | otherwise = removido xs ++ [rotas]
 
-    rodarMapa :: Nome -> IO Mapa -> (Bool, Cidade)
-    rodarMapa cidadeAlvo (x:xs)
-        | fst (buscarCidade cidadeAlvo x) = (True, x)
-        | otherwise = rodarMapa cidadeAlvo xs
+    let tirarEstrada :: Mapa -> Mapa
+        tirarEstrada [] = []
+        tirarEstrada ((cidade, localizacao, rotas):xs)
+            | rotas == [] = []
+            | cidade == cidadeAlvo = [(cidade, localizacao, (removido rotas))] ++ tirarEstrada xs
+            | otherwise = [(cidade, localizacao, rotas)] ++ tirarEstrada xs
 
-    buscarCidade :: Nome -> Cidade -> (Bool, Cidade)
-    buscarCidade cidadeAlvo (cidade, localizacao, rotas)
-        | cidadeAlvo == cidade = (True, (cidade, localizacao, rotas))
-        | otherwise = (False, (cidade, localizacao, rotas))
+    let novoMapa = tirarEstrada loadMapa 
 
-    -- loadMapa :: Mapa
-    -- loadMapa = mapaCompleto
-    -- [("Aracaju", (10.0,11.0), ["Recife", "Maceio"]), ("Maceio", (10.0,11.0), ["Recife", "Aracaju"]), ("Recife", (10.0,11.0), ["Aracaju", "Maceio"])]
+    salvarMapa novoMapa "saida.mapa"
 
-    rmvCidade :: Cidade -> Cidade
-    rmvCidade cidade = cidade
+    print novoMapa
