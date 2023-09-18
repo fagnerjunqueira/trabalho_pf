@@ -1,6 +1,17 @@
-Recife,-8.0476,-34.8770,Joao Pessoa,Maceio,Salvador
-Joao Pessoa,-7.1153,-34.8641,Recife,Natal
-Maceio,-9.6658,-35.7351,Recife,Salvador
-Salvador,-12.9716,-38.5019,Recife,Maceio,Aracaju
-Natal,-5.7945,-35.2120,Joao Pessoa
-Aracaju,-10.9472,-37.0731,Salvador
+São Luiz, 2.0, 12.0, Teresina, Fortaleza,
+
+Teresina, 4.0, 8.0, Fortaleza, São Luiz, Natal
+
+Fortaleza, 7.0, 11.0, Teresina, São Luiz, Natal, Salvador
+
+Natal, 11.00, 8.0, João Pessoa, Fortaleza, Teresina
+
+João Pessoa, 11.5, 6.0, Natal, Recife, Alagoas , Salvador
+
+Recife, 12.0, 5.0, Maceio, Aracaju, Salvador, João Pessoa, Natal
+
+Maceio, 11.0, 4.0, Aracaju, Salvador, Recife, João Pessoa, Natal
+
+Aracaju, 10.0, 3.0, Salvador, Maceio, Recife, João Pessoa, Natal
+
+Salvador, 9.0, 1.0, Aracaju, Maceio, Recife, João Pessoa, Natal
