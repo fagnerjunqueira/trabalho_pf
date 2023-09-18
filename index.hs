@@ -7,14 +7,16 @@ showMapa = [("",(0,0),[""])]
 adcCidade :: IO ()
 adcCidade = do
     putStrLn "Informe o nome do arquivo de mapa:"
-    loadMapa <- carregarMapa "teste.mapa"
+    nomeArquivo <- getLine
+    loadMapa <- carregarMapa nomeArquivo
     putStrLn "Informe a cidade que será adicionada:"
     cidadeNV <- getLine
-    putStrLn "Informe as coordenadas da cidade:"
+    putStrLn "Informe as coordenadas da cidade no padrao '(x.x,y.y)':"
     localizacao <- getLine
     let nvlocalizacao = read localizacao :: (Double,Double) -- Convertendo String para (Double,Double)
 
     let adcCid :: [Cidade]
+        adcCidade [] = []
         adcCid = [(cidadeNV, nvlocalizacao, [])]
     let novoMapa = loadMapa ++ adcCid
     salvarMapa novoMapa "saida.mapa"
@@ -24,7 +26,8 @@ adcCidade = do
 adcEstrada :: IO ()
 adcEstrada = do
     putStrLn "Informe o nome do arquivo de mapa:"
-    loadMapa <- carregarMapa "teste.mapa"
+    nomeArquivo <- getLine
+    loadMapa <- carregarMapa nomeArquivo
     putStrLn "Informe a cidade que recebera as estradas:"
     cidadeQueRecebe <- getLine
     putStrLn "Digite as novas estradas separadas por espaco:"
@@ -35,7 +38,6 @@ adcEstrada = do
     let colocarEstrada :: Mapa -> Mapa
         colocarEstrada [] = []
         colocarEstrada ((cidade, localizacao, rotas):xs)
-            | rotas == [] = []
             | cidade == cidadeQueRecebe = [(cidade, localizacao, rotas++listaFinalDeRotas)] ++ colocarEstrada xs
             | otherwise = [(cidade, localizacao, rotas)] ++ colocarEstrada xs
 
@@ -62,7 +64,8 @@ tirarEstrada ((cidade, localizacao, rotas):xs) cidadeAlvo estradaQuePerde
 rmvEstrada :: IO ()
 rmvEstrada = do
     putStrLn "Informe o nome do arquivo de mapa:"
-    loadMapa <- carregarMapa "teste.mapa"
+    nomeArquivo <- getLine
+    loadMapa <- carregarMapa nomeArquivo
     putStrLn "Informe a cidade que perdera a estrada:"
     cidadeAlvo <- getLine
     putStrLn "Digite a estrada que sera removida:"
@@ -77,7 +80,8 @@ rmvEstrada = do
 rmvCidade :: IO ()
 rmvCidade = do
     putStrLn "Informe o nome do arquivo de mapa:"
-    loadMapa <- carregarMapa "teste.mapa"
+    nomeArquivo <- getLine
+    loadMapa <- carregarMapa nomeArquivo
     putStrLn "Informe a cidade que será removida:"
     cidadeAlvo <- getLine
 
