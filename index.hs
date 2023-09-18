@@ -3,6 +3,23 @@ import Mapa
 showMapa :: Mapa
 showMapa = [("",(0,0),[""])]
 
+--Adicionar cidade
+adcCidade :: IO ()
+adcCidade = do
+    putStrLn "Informe o nome do arquivo de mapa:"
+    loadMapa <- carregarMapa "teste.mapa"
+    putStrLn "Informe a cidade que será adicionada:"
+    cidadeNV <- getLine
+    putStrLn "Informe as coordenadas da cidade:"
+    localizacao <- getLine
+
+    let adcCid :: [Cidade]
+        adcCid = [(cidadeNV, localizacao, [])]
+    let novoMapa = loadMapa ++ adcCid
+    salvarMapa adcCid "saida.mapa"
+
+    print novoMapa
+
 adcEstrada :: IO ()
 adcEstrada = do
     putStrLn "Informe o nome do arquivo de mapa:"
