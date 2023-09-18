@@ -16,7 +16,7 @@ adcCidade = do
     let adcCid :: [Cidade]
         adcCid = [(cidadeNV, localizacao, [])]
     let novoMapa = loadMapa ++ adcCid
-    salvarMapa adcCid "saida.mapa"
+    salvarMapa novoMapa "saida.mapa"
 
     print novoMapa
 
