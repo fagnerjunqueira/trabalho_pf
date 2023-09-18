@@ -12,12 +12,13 @@ adcCidade = do
     cidadeNV <- getLine
     putStrLn "Informe as coordenadas da cidade:"
     localizacao <- getLine
+    let nvlocalizacao = read localizacao :: (Double,Double) -- Convertendo String para (Double,Double)
 
     let adcCid :: [Cidade]
-        adcCid = [(cidadeNV, localizacao, [])]
+        adcCid = [(cidadeNV, nvlocalizacao, [])]
     let novoMapa = loadMapa ++ adcCid
     salvarMapa novoMapa "saida.mapa"
-
+    
     print novoMapa
 
 adcEstrada :: IO ()
