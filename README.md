@@ -39,7 +39,7 @@ remove as rotas que a envolvam)
 - ~~Criação dos tipos de dados que representam os mapas, cidades, estradas, e o que mais julgarem
 necessário~~
 - ~~Função sem entrada e que retorna um mapa vazio~~
-- Função que, dado o mapa, o nome de uma cidade e as coordenadas da cidade, adiciona a cidade ao mapa
+- ~~Função que, dado o mapa, o nome de uma cidade e as coordenadas da cidade, adiciona a cidade ao mapa~~
 - ~~Função que, dado o nome de uma cidade e um mapa, retorna o mapa sem a cidade (e, consequentemente,
 remove as rotas que a envolvam)~~
 - ~~Função que adiciona uma estrada a um mapa~~
