@@ -3,17 +3,6 @@ import Mapa
 showMapa :: Mapa
 showMapa = [("",(0,0),[""])]
 
---Função mara mostrar opções e seus passos (Opção 1)
-help :: IO ()
-help = do
-    putStrLn "\nA seguir, mostraremos como criar e manipular um mapa com as funções:"
-    putStrLn "A princípio, precisaremos de um mapa inicial, vazio e chamado teste.mapa, para criar um outro mapa, chamado saida.mapa."
-    putStrLn "Depois, para manipular o mapa criado, sempre que solicitado o nome do arquivo do mapa, insira o mapa chamado saida.mapa.\n"
-    putStrLn "1.showMapa. Função que mostra um mapa vazio.\n2.adcCidade. Função que adiciona uma cidade ao mapa."
-    putStrLn "3.adcEstrada. Função que adiciona estradas às cidades existentes no mapa."
-    putStrLn "4.rmvEstrada. Função que remove estrada de uma cidade existente no mapa."
-    putStrLn "5.rmvCidade. Função que remove cidade existente no mapa.\n"
-    putStrLn "Portanto, digite a função desejada, respeitando que o mapa está vazio e pretende criá-lo, para depois manipulá-lo:"
 --Adicionar cidade
 adcCidade :: IO ()
 adcCidade = do
