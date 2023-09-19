@@ -3,7 +3,7 @@
 ## Instruções de uso
 
 ### Adicionar uma cidade
-- Chame a função ``rmvCidade``
+- Chame a função ``adcCidade``
 
 ### Remover uma cidade
 - Chame a função ``rmvCidade``
@@ -16,6 +16,9 @@
 
 ### Mostrar mapa em branco
 - Chame a função ``showMapa``
+
+### Observação
+- Sempre que um mapa for manipulado a saida dele será salva no arquivo ``saida.mapa``
 
 ## Requisitos
 

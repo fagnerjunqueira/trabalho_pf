@@ -11,7 +11,7 @@ adcCidade = do
     loadMapa <- carregarMapa nomeArquivo
     putStrLn "Informe a cidade que será adicionada:"
     cidadeNV <- getLine
-    putStrLn "Informe as coordenadas da cidade no padrao '(x.x,y.y)':"
+    putStrLn "Informe as coordenadas da cidade no padrao '(Double,Double)':"
     localizacao <- getLine
     let nvlocalizacao = read localizacao :: (Double,Double) -- Convertendo String para (Double,Double)
 
@@ -30,9 +30,9 @@ adcEstrada = do
     loadMapa <- carregarMapa nomeArquivo
     putStrLn "Informe a cidade que recebera as estradas:"
     cidadeQueRecebe <- getLine
-    putStrLn "Digite as novas estradas separadas por espaco:"
+    putStrLn "Digite as novas estradas no padrao '[String]':"
     listaRotas <- getLine
-    let listaFinalDeRotas = words listaRotas
+    let listaFinalDeRotas = read listaRotas :: [String]
 
     -- Adicionar estrada
     let colocarEstrada :: Mapa -> Mapa
