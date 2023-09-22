@@ -55,7 +55,7 @@ Essas funções em Haskell permitem ao usuário interagir com um mapa, adicionan
 ### Observação
 - Sempre que um mapa for manipulado a saida dele será salva no arquivo ``saida.mapa``
 
-## Requisitos
+## Requisitos Entrega 01
 
 - Criação dos tipos de dados que representam os mapas, cidades, estradas, e o que mais julgarem
 necessário
@@ -68,3 +68,23 @@ remove as rotas que a envolvam)
 - Função que carrega um mapa de um arquivo (vide Subseção 1.1)
 - Função que salva um mapa em um arquivo (vide Subseção 1.1)
 - Função que salva um mapa como uma imagem (será fornecido código de apoio)
+
+## Requisitos Entrega 02
+
+- Função que, dadas duas cidades, calcula a distância euclidiana entre elas
+- Função que, dadas duas cidades, indica se há ou não uma estrada entre elas
+- Função que, dadas duas cidades, indica se há ou não uma rota entre elas
+- Função que, dada uma cidade, retorna os nomes das cidades conectadas a ela por uma estrada
+- Função que, dadas duas cidades, mostra as cidades que aparecem em uma rota entre elas – se houver. Havendo rota, não precisa ser a mais curta.
+- Função que, dadas duas cidades, calcula a comprimento da rota entre elas (somatório das distâncias euclidianas entre as cidades que formam a rota)
+- Códigos de teste para estas funções (comandos do GHCi)
+
+## Requisitos Concluidos Entrega 02
+
+- ~~Função que, dadas duas cidades, calcula a distância euclidiana entre elas~~
+- ~~Função que, dadas duas cidades, indica se há ou não uma estrada entre elas~~
+- Função que, dadas duas cidades, indica se há ou não uma rota entre elas
+- Função que, dada uma cidade, retorna os nomes das cidades conectadas a ela por uma estrada
+- Função que, dadas duas cidades, mostra as cidades que aparecem em uma rota entre elas – se houver. Havendo rota, não precisa ser a mais curta.
+- Função que, dadas duas cidades, calcula a comprimento da rota entre elas (somatório das distâncias euclidianas entre as cidades que formam a rota)
+- Códigos de teste para estas funções (comandos do GHCi)

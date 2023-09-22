@@ -3,6 +3,51 @@ import Mapa
 showMapa :: Mapa
 showMapa = [("",(0,0),[""])]
 
+getCidade :: Mapa -> Nome -> Cidade
+getCidade [] _ = error "Mapa vazio"
+getCidade ((cidade, localizacao, rotas):xs) alvo
+    | cidade == alvo = (cidade, localizacao, rotas)
+    | otherwise = getCidade xs alvo
+
+euclidiana :: Localizacao -> Localizacao -> Double
+euclidiana (xa, ya) (xb, yb) = sqrt(p1 + p2)
+    where p1 = (xa-xb)^2; p2 = (ya-yb)^2
+
+possuiEstrada :: [String] -> Bool
+possuiEstrada lista = if length lista > 0 then True else False
+-- Verifica se determinada cidade existe nas rotas de outra
+hasEstrada :: IO ()
+hasEstrada = do
+    putStrLn "Informe o nome do arquivo de mapa:"
+    -- nomeArquivo <- getLine
+    loadMapa <- carregarMapa "teste.mapa"
+    putStrLn "Informe a primeira cidade:"
+    let cidadeA = "Recife" -- getLine
+    putStrLn "Informe a segunda cidade:"
+    let cidadeB = "Sao Paulo" -- getLine
+
+    let (_, _, estradasB) = getCidade loadMapa cidadeB
+
+    print (possuiEstrada (filter (==cidadeA) estradasB))
+
+-- Calcular distância Euclidiana
+distEuclidiana :: IO ()
+distEuclidiana = do
+    putStrLn "Informe o nome do arquivo de mapa:"
+    -- nomeArquivo <- getLine
+    loadMapa <- carregarMapa "teste.mapa"
+    putStrLn "Informe a primeira cidade:"
+    let cidadeA = "Recife" -- getLine
+    putStrLn "Informe a segunda cidade:"
+    let cidadeB = "Sao Paulo" -- getLine
+
+    let (_, locA, _) = getCidade loadMapa cidadeA
+    let (_, locB, _) = getCidade loadMapa cidadeB
+
+    let distancia = euclidiana locA locB
+
+    print distancia
+
 --Adicionar cidade
 adcCidade :: IO ()
 adcCidade = do
