@@ -161,16 +161,9 @@ buscarVizinhos = do
     putStrLn "Informe o nome do arquivo de mapa:"
     nomeArquivo <- getLine
     loadMapa <- carregarMapa nomeArquivo
-    putStrLn "Cidade A ser Pesquisada:"
+    putStrLn "Cidade a ser pesquisada:"
     cidadeAlvo <- getLine
     
-    let vizinhos :: Nome -> Mapa -> [Nome]
-        vizinhos cidadeAlvo mapa = concatMap rotasCidades mapa
-            where
-                rotasCidades :: Cidade -> [Nome]
-                rotasCidades (_, _, rotas) = filter (/= cidadeAlvo) rotas
-                   
-    let vizinhosDaCidade = vizinhos cidadeAlvo loadMapa
-    putStrLn "Cidades vizinhas:"
-    mapM_ putStrLn vizinhosDaCidade
-    
+    let (_, _, rotas) = getCidade loadMapa cidadeAlvo
+
+    print rotas
