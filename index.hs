@@ -3,17 +3,51 @@ import Mapa
 showMapa :: Mapa
 showMapa = [("",(0,0),[""])]
 
---Função mara mostrar opções e seus passos (Opção 1)
-help :: IO ()
-help = do
-    putStrLn "\nA seguir, mostraremos como criar e manipular um mapa com as funções:"
-    putStrLn "A princípio, precisaremos de um mapa inicial, vazio e chamado teste.mapa, para criar um outro mapa, chamado saida.mapa."
-    putStrLn "Depois, para manipular o mapa criado, sempre que solicitado o nome do arquivo do mapa, insira o mapa chamado saida.mapa.\n"
-    putStrLn "1.showMapa. Função que mostra um mapa vazio.\n2.adcCidade. Função que adiciona uma cidade ao mapa."
-    putStrLn "3.adcEstrada. Função que adiciona estradas às cidades existentes no mapa."
-    putStrLn "4.rmvEstrada. Função que remove estrada de uma cidade existente no mapa."
-    putStrLn "5.rmvCidade. Função que remove cidade existente no mapa.\n"
-    putStrLn "Portanto, digite a função desejada, respeitando que o mapa está vazio e pretende criá-lo, para depois manipulá-lo:"
+getCidade :: Mapa -> Nome -> Cidade
+getCidade [] _ = error "Mapa vazio"
+getCidade ((cidade, localizacao, rotas):xs) alvo
+    | cidade == alvo = (cidade, localizacao, rotas)
+    | otherwise = getCidade xs alvo
+
+euclidiana :: Localizacao -> Localizacao -> Double
+euclidiana (xa, ya) (xb, yb) = sqrt(p1 + p2)
+    where p1 = (xa-xb)^2; p2 = (ya-yb)^2
+
+possuiEstrada :: [String] -> Bool
+possuiEstrada lista = if length lista > 0 then True else False
+-- Verifica se determinada cidade existe nas rotas de outra
+hasEstrada :: IO ()
+hasEstrada = do
+    putStrLn "Informe o nome do arquivo de mapa:"
+    -- nomeArquivo <- getLine
+    loadMapa <- carregarMapa "teste.mapa"
+    putStrLn "Informe a primeira cidade:"
+    let cidadeA = "Recife" -- getLine
+    putStrLn "Informe a segunda cidade:"
+    let cidadeB = "Sao Paulo" -- getLine
+
+    let (_, _, estradasB) = getCidade loadMapa cidadeB
+
+    print (possuiEstrada (filter (==cidadeA) estradasB))
+
+-- Calcular distância Euclidiana
+distEuclidiana :: IO ()
+distEuclidiana = do
+    putStrLn "Informe o nome do arquivo de mapa:"
+    -- nomeArquivo <- getLine
+    loadMapa <- carregarMapa "teste.mapa"
+    putStrLn "Informe a primeira cidade:"
+    let cidadeA = "Recife" -- getLine
+    putStrLn "Informe a segunda cidade:"
+    let cidadeB = "Sao Paulo" -- getLine
+
+    let (_, locA, _) = getCidade loadMapa cidadeA
+    let (_, locB, _) = getCidade loadMapa cidadeB
+
+    let distancia = euclidiana locA locB
+
+    print distancia
+
 --Adicionar cidade
 adcCidade :: IO ()
 adcCidade = do
@@ -22,7 +56,7 @@ adcCidade = do
     loadMapa <- carregarMapa nomeArquivo
     putStrLn "Informe a cidade que será adicionada:"
     cidadeNV <- getLine
-    putStrLn "Informe as coordenadas da cidade no padrao '(x.x,y.y)':"
+    putStrLn "Informe as coordenadas da cidade no padrao '(Double,Double)':"
     localizacao <- getLine
     let nvlocalizacao = read localizacao :: (Double,Double) -- Convertendo String para (Double,Double)
 
@@ -41,9 +75,9 @@ adcEstrada = do
     loadMapa <- carregarMapa nomeArquivo
     putStrLn "Informe a cidade que recebera as estradas:"
     cidadeQueRecebe <- getLine
-    putStrLn "Digite as novas estradas separadas por espaco:"
+    putStrLn "Digite as novas estradas no padrao '[String]':"
     listaRotas <- getLine
-    let listaFinalDeRotas = words listaRotas
+    let listaFinalDeRotas = read listaRotas :: [String]
 
     -- Adicionar estrada
     let colocarEstrada :: Mapa -> Mapa
