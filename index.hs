@@ -155,3 +155,22 @@ rmvCidade = do
     salvarMapa (mapaFinal novoMapa) "saida.mapa"
 
     print (mapaFinal novoMapa)
+
+buscarVizinhos :: IO ()
+buscarVizinhos = do
+    putStrLn "Informe o nome do arquivo de mapa:"
+    nomeArquivo <- getLine
+    loadMapa <- carregarMapa nomeArquivo
+    putStrLn "Cidade A ser Pesquisada:"
+    cidadeAlvo <- getLine
+    
+    let vizinhos :: Nome -> Mapa -> [Nome]
+        vizinhos cidadeAlvo mapa = concatMap rotasCidades mapa
+            where
+                rotasCidades :: Cidade -> [Nome]
+                rotasCidades (_, _, rotas) = filter (/= cidadeAlvo) rotas
+                   
+    let vizinhosDaCidade = vizinhos cidadeAlvo loadMapa
+    putStrLn "Cidades vizinhas:"
+    mapM_ putStrLn vizinhosDaCidade
+    
