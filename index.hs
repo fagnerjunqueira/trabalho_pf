@@ -121,3 +121,11 @@ rmvCidade = do
     salvarMapa (mapaFinal novoMapa) "saida.mapa"
 
     print (mapaFinal novoMapa)
+
+
+vizinhos :: Nome -> Mapa -> [Nome]
+vizinhos cidadeAlvo mapa = concatMap rotasCidades mapa
+    where
+      rotasCidades :: Cidade -> [Nome]
+      rotasCidades (_, _, rotas) = filter (/= cidadeAlvo) rotas
+    
