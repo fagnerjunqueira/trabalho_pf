@@ -1,5 +1,6 @@
 import Mapa
 
+
 showMapa :: Mapa
 showMapa = [("",(0,0),[""])]
 
@@ -167,3 +168,15 @@ buscarVizinhos = do
     let (_, _, rotas) = getCidade loadMapa cidadeAlvo
 
     print rotas
+
+
+mostrarRotaEntreCidades :: Mapa -> Nome -> Nome -> IO ()
+mostrarRotaEntreCidades mapa cidadeOrigem cidadeDestino = do
+    let (_, _, rotasOrigem) = getCidade mapa cidadeOrigem
+    let (_, _, rotasDestino) = getCidade mapa cidadeDestino
+
+    let rotaComum = filter (`elem` rotasDestino) rotasOrigem
+
+    if null rotaComum
+        then putStrLn $ "Não há rota entre " ++ cidadeOrigem ++ " e " ++ cidadeDestino
+        else putStrLn $ "Cidades na rota entre " ++ cidadeOrigem ++ " e " ++ cidadeDestino ++ ": " ++ show rotaComum
