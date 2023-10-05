@@ -68,23 +68,25 @@ rmvCidade mapa cidadeAlvo = do
     
     let novoMapa = remover mapa 
 
-    let tirarEstrada :: Rotas -> Rotas
-        tirarEstrada [] = []
-        tirarEstrada (rotas:xs)
-            | rotas == [] = []
-            | rotas == cidadeAlvo = tirarEstrada xs
-            | otherwise = [rotas] ++ tirarEstrada xs
+    let loopRotas :: Rotas -> Rotas
+        loopRotas [] = []
+        loopRotas (x:xs)
+            | x == [] = []
+            | x == cidadeAlvo = loopRotas xs
+            | otherwise = [x] ++ loopRotas xs
 
-    let mapaFinal :: Mapa -> Mapa
-        mapaFinal [] = []
-        mapaFinal ((cidade , coordenadas, rotas):xs)
-            | rotas == [] = []
-            | otherwise = [(cidade, coordenadas, (tirarEstrada rotas))] ++ mapaFinal xs
+    let tiraCidade :: Cidade -> Cidade
+        tiraCidade (cidade,localizacao,estradas) = (cidade,localizacao,novasEstradas)
+            where novasEstradas = loopRotas estradas
 
-    salvarMapa (mapaFinal novoMapa) "saida.mapa"
+    let removerCidadeDasRotas :: Mapa
+        removerCidadeDasRotas = [tiraCidade (cidade,localizacao,estradas) | (cidade,localizacao,estradas) <- novoMapa]
 
-    print (mapaFinal novoMapa)
-
+    let novoMapa = removerCidadeDasRotas
+    
+    salvarMapa novoMapa "saida.mapa"
+    print novoMapa
+    
 mostrarRotaEntreCidades :: Mapa -> Nome -> Nome -> IO ()
 mostrarRotaEntreCidades mapa cidadeOrigem cidadeDestino = do
     let (_, _, rotasOrigem) = getCidade mapa cidadeOrigem
@@ -123,22 +125,10 @@ possuiEstrada lista = if length lista > 0 then True else False
 hasEstrada :: Mapa -> Nome -> Nome -> IO ()
 hasEstrada mapa cidadeA cidadeB = do
     let (_, _, estradasB) = getCidade mapa cidadeB
-    print (possuiEstrada' (filter (==cidadeA) estradasB))
-    
+    print (possuiEstrada (filter (==cidadeA) estradasB))
+
 -- Função que retorna os nomes das cidades conectadas a uma cidade por uma estrada
 buscarVizinhos :: Mapa -> Nome -> IO ()
 buscarVizinhos mapa cidadeAlvo = do
     let (_, _, rotas) = getCidade mapa cidadeAlvo
     print rotas
-
--- Função que mostra as cidades que aparecem em uma rota entre duas cidades, se houver.
-mostrarRotaEntreCidades :: Mapa -> Nome -> Nome -> IO ()
-mostrarRotaEntreCidades mapa cidadeOrigem cidadeDestino = do
-    let (_, _, rotasOrigem) = getCidade mapa cidadeOrigem
-    let (_, _, rotasDestino) = getCidade mapa cidadeDestino
-
-    let rotaComum = filter (`elem` rotasDestino) rotasOrigem
-
-    if null rotaComum
-        then putStrLn $ "Não há rota entre " ++ cidadeOrigem ++ " e " ++ cidadeDestino
-        else putStrLn $ "Cidades na rota entre " ++ cidadeOrigem ++ " e " ++ cidadeDestino
