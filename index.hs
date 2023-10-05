@@ -17,21 +17,21 @@ adcCidade mapa cidadeNV localizacao = do
     
     print novoMapa
 
+colocarEstrada :: Nome -> Mapa -> Rotas -> Mapa
+colocarEstrada _ [] _ = []
+colocarEstrada cidadeQueRecebe ((cidade, localizacao, rotas):xs) novasRotas
+    | cidade == cidadeQueRecebe = [(cidade, localizacao, rotas++novasRotas)] ++ colocarEstrada cidadeQueRecebe xs novasRotas
+    | otherwise = [(cidade, localizacao, rotas)] ++ colocarEstrada cidadeQueRecebe xs novasRotas
+
 adcEstrada :: Mapa -> Nome -> Rotas -> IO ()
 adcEstrada mapa cidadeQueRecebe novasRotas = do
 
     -- Adicionar estrada
-    let colocarEstrada :: Mapa -> Mapa
-        colocarEstrada [] = []
-        colocarEstrada ((cidade, localizacao, rotas):xs)
-            | cidade == cidadeQueRecebe = [(cidade, localizacao, rotas++novasRotas)] ++ colocarEstrada xs
-            | otherwise = [(cidade, localizacao, rotas)] ++ colocarEstrada xs
+    let newMapa = colocarEstrada cidadeQueRecebe mapa novasRotas
 
-    let novoMapa = colocarEstrada mapa
+    salvarMapa newMapa "saida.mapa"
 
-    salvarMapa novoMapa "saida.mapa"
-
-    print novoMapa
+    print newMapa
 
 removido :: Rotas -> Nome -> Rotas
 removido [] _ = []
