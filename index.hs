@@ -169,6 +169,7 @@ buscarVizinhos = do
 
     print rotas
 
+    
 
 mostrarRotaEntreCidades :: Mapa -> Nome -> Nome -> IO ()
 mostrarRotaEntreCidades mapa cidadeOrigem cidadeDestino = do
