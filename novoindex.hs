@@ -35,14 +35,43 @@ buscarVizinhos mapa cidadeAlvo = do
     let (_, _, rotas) = getCidade mapa cidadeAlvo
     print rotas
 
--- Função que mostra as cidades que aparecem em uma rota entre duas cidades, se houver.
-mostrarRotaEntreCidades :: Mapa -> Nome -> Nome -> IO ()
-mostrarRotaEntreCidades mapa cidadeOrigem cidadeDestino = do
-    let (_, _, rotasOrigem) = getCidade mapa cidadeOrigem
-    let (_, _, rotasDestino) = getCidade mapa cidadeDestino
+verdade :: Nome -> Rotas -> Bool
+verdade _ [] = False
+verdade cidadeA (x:xs)
+         | cidadeA == x = True
+         | otherwise  = verdade cidadeA xs
 
-    let rotaComum = filter (`elem` rotasDestino) rotasOrigem
+testenovo :: Nome -> Rotas -> Bool
+testenovo _ [] = False
+testenovo cidadeA (z:zs)
+  | cidadeA == z = True
+  | otherwise  = testenovo cidadeA zs
 
-    if null rotaComum
-        then putStrLn $ "Não há rota entre " ++ cidadeOrigem ++ " e " ++ cidadeDestino
-        else putStrLn $ "Cidades na rota entre " ++ cidadeOrigem ++ " e " ++ cidadeDestino
+testeverdade :: Mapa -> Nome -> Nome -> IO ()
+testeverdade mapa cidadeA cidadeB = do
+    let (_, _, estradasA) = getCidade mapa cidadeA
+    let testada = testenovo cidadeB estradasA
+    print testada
+
+buscarVizinhos :: Mapa -> Nome -> IO ()
+buscarVizinhos mapa cidadeAlvo = do
+    let (_, _, rotas) = getCidade mapa cidadeAlvo
+    print rotas
+
+verdade :: Nome -> [String] -> Bool
+verdade _ [] = False
+verdade cidadeA estradas = cidadeA `elem` estradas
+
+testenovo :: Nome -> [String] -> Bool
+testenovo cidadeA estradas = cidadeA `elem` estradas
+
+testeverdade :: Mapa -> Nome -> Nome -> IO ()
+testeverdade mapa cidadeA cidadeB = do
+    let (_, _, estradasA) = getCidade mapa cidadeA
+    let testada = all (\estrada -> verdade cidadeB estradasA) estradasA
+    print testada
+-- Função que mostra as cidades que aparecem em uma rota entre duas cidades, se houver
+--rotaComum :: Mapa -> Nome -> Nome -> IO()
+--rotaComum mapa cidadeA cidadeB = do
+--   let (_, _, estradasB) = getCidade mapa cidadeB
+--   let (_, _, estradasA) = getCidade mapa 
