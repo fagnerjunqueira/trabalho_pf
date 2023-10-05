@@ -1,93 +1,33 @@
 import Mapa
 
-
 showMapa :: Mapa
-showMapa = [("",(0,0),[""])]
-
-getCidade :: Mapa -> Nome -> Cidade
-getCidade [] _ = error "Mapa vazio"
-getCidade ((cidade, localizacao, rotas):xs) alvo
-    | cidade == alvo = (cidade, localizacao, rotas)
-    | otherwise = getCidade xs alvo
-
-euclidiana :: Localizacao -> Localizacao -> Double
-euclidiana (xa, ya) (xb, yb) = sqrt(p1 + p2)
-    where p1 = (xa-xb)^2; p2 = (ya-yb)^2
-
-possuiEstrada :: [String] -> Bool
-possuiEstrada lista = if length lista > 0 then True else False
--- Verifica se determinada cidade existe nas rotas de outra
-hasEstrada :: IO ()
-hasEstrada = do
-    putStrLn "Informe o nome do arquivo de mapa:"
-    -- nomeArquivo <- getLine
-    loadMapa <- carregarMapa "teste.mapa"
-    putStrLn "Informe a primeira cidade:"
-    let cidadeA = "Recife" -- getLine
-    putStrLn "Informe a segunda cidade:"
-    let cidadeB = "Sao Paulo" -- getLine
-
-    let (_, _, estradasB) = getCidade loadMapa cidadeB
-
-    print (possuiEstrada (filter (==cidadeA) estradasB))
-
--- Calcular distância Euclidiana
-distEuclidiana :: IO ()
-distEuclidiana = do
-    putStrLn "Informe o nome do arquivo de mapa:"
-    -- nomeArquivo <- getLine
-    loadMapa <- carregarMapa "teste.mapa"
-    putStrLn "Informe a primeira cidade:"
-    let cidadeA = "Recife" -- getLine
-    putStrLn "Informe a segunda cidade:"
-    let cidadeB = "Sao Paulo" -- getLine
-
-    let (_, locA, _) = getCidade loadMapa cidadeA
-    let (_, locB, _) = getCidade loadMapa cidadeB
-
-    let distancia = euclidiana locA locB
-
-    print distancia
+showMapa = []
 
 --Adicionar cidade
-adcCidade :: IO ()
-adcCidade = do
-    putStrLn "Informe o nome do arquivo de mapa:"
-    nomeArquivo <- getLine
-    loadMapa <- carregarMapa nomeArquivo
-    putStrLn "Informe a cidade que será adicionada:"
-    cidadeNV <- getLine
-    putStrLn "Informe as coordenadas da cidade no padrao '(Double,Double)':"
-    localizacao <- getLine
-    let nvlocalizacao = read localizacao :: (Double,Double) -- Convertendo String para (Double,Double)
+adcCidade :: Mapa -> Nome -> Localizacao -> IO ()
+adcCidade mapa cidadeNV localizacao = do
 
     let adcCid :: [Cidade]
         adcCidade [] = []
-        adcCid = [(cidadeNV, nvlocalizacao, [])]
-    let novoMapa = loadMapa ++ adcCid
+        adcCid = [(cidadeNV, localizacao, [])]
+
+    let novoMapa = mapa ++ adcCid
+
     salvarMapa novoMapa "saida.mapa"
     
     print novoMapa
 
-adcEstrada :: IO ()
-adcEstrada = do
-    putStrLn "Informe o nome do arquivo de mapa:"
-    nomeArquivo <- getLine
-    loadMapa <- carregarMapa nomeArquivo
-    putStrLn "Informe a cidade que recebera as estradas:"
-    cidadeQueRecebe <- getLine
-    putStrLn "Digite as novas estradas no padrao '[String]':"
-    listaRotas <- getLine
-    let listaFinalDeRotas = read listaRotas :: [String]
+adcEstrada :: Mapa -> Nome -> Rotas -> IO ()
+adcEstrada mapa cidadeQueRecebe novasRotas = do
 
     -- Adicionar estrada
     let colocarEstrada :: Mapa -> Mapa
         colocarEstrada [] = []
         colocarEstrada ((cidade, localizacao, rotas):xs)
-            | cidade == cidadeQueRecebe = [(cidade, localizacao, rotas++listaFinalDeRotas)] ++ colocarEstrada xs
+            | cidade == cidadeQueRecebe = [(cidade, localizacao, rotas++novasRotas)] ++ colocarEstrada xs
             | otherwise = [(cidade, localizacao, rotas)] ++ colocarEstrada xs
 
-    let novoMapa = colocarEstrada loadMapa
+    let novoMapa = colocarEstrada mapa
 
     salvarMapa novoMapa "saida.mapa"
 
@@ -107,17 +47,10 @@ tirarEstrada ((cidade, localizacao, rotas):xs) cidadeAlvo estradaQuePerde
     | cidade == cidadeAlvo = [(cidade, localizacao, (removido rotas estradaQuePerde))] ++ tirarEstrada xs cidadeAlvo estradaQuePerde
     | otherwise = [(cidade, localizacao, rotas)] ++ tirarEstrada xs cidadeAlvo estradaQuePerde
 
-rmvEstrada :: IO ()
-rmvEstrada = do
-    putStrLn "Informe o nome do arquivo de mapa:"
-    nomeArquivo <- getLine
-    loadMapa <- carregarMapa nomeArquivo
-    putStrLn "Informe a cidade que perdera a estrada:"
-    cidadeAlvo <- getLine
-    putStrLn "Digite a estrada que sera removida:"
-    estradaQuePerde <- getLine
+rmvEstrada :: Mapa -> Nome -> Nome -> IO ()
+rmvEstrada mapa cidadeAlvo estradaQuePerde = do
 
-    let novoMapa = tirarEstrada loadMapa cidadeAlvo estradaQuePerde
+    let novoMapa = tirarEstrada mapa cidadeAlvo estradaQuePerde
 
     salvarMapa novoMapa "saida.mapa"
 
@@ -157,20 +90,6 @@ rmvCidade = do
 
     print (mapaFinal novoMapa)
 
-buscarVizinhos :: IO ()
-buscarVizinhos = do
-    putStrLn "Informe o nome do arquivo de mapa:"
-    nomeArquivo <- getLine
-    loadMapa <- carregarMapa nomeArquivo
-    putStrLn "Cidade a ser pesquisada:"
-    cidadeAlvo <- getLine
-    
-    let (_, _, rotas) = getCidade loadMapa cidadeAlvo
-
-    print rotas
-
-    
-
 mostrarRotaEntreCidades :: Mapa -> Nome -> Nome -> IO ()
 mostrarRotaEntreCidades mapa cidadeOrigem cidadeDestino = do
     let (_, _, rotasOrigem) = getCidade mapa cidadeOrigem
@@ -181,3 +100,50 @@ mostrarRotaEntreCidades mapa cidadeOrigem cidadeDestino = do
     if null rotaComum
         then putStrLn $ "Não há rota entre " ++ cidadeOrigem ++ " e " ++ cidadeDestino
         else putStrLn $ "Cidades na rota entre " ++ cidadeOrigem ++ " e " ++ cidadeDestino ++ ": " ++ show rotaComum
+
+getCidade :: Mapa -> Nome -> Cidade
+getCidade [] _ = error "Não existe no mapa"
+getCidade ((cidade, localizacao, rotas):xs) alvo
+    | cidade == alvo = (cidade, localizacao, rotas)
+    | otherwise = getCidade xs alvo
+
+euclidiana' :: Localizacao -> Localizacao -> Double
+euclidiana' (xa, ya) (xb, yb) = sqrt(p1 + p2)
+    where p1 = (xa-xb)^2; p2 = (ya-yb)^2
+
+-- Calcular distância Euclidiana
+distEuclidiana' :: Mapa -> Nome -> Nome -> IO ()
+distEuclidiana' mapa cidadeA cidadeB = do
+    let (_, locA, _) = getCidade mapa cidadeA
+    let (_, locB, _) = getCidade mapa cidadeB
+
+    let distancia = euclidiana' locA locB
+
+    print distancia
+
+-- Verifica se determinada cidade existe nas rotas de outra
+possuiEstrada' :: [String] -> Bool
+possuiEstrada' lista = if length lista > 0 then True else False
+
+hasEstrada' :: Mapa -> Nome -> Nome -> IO ()
+hasEstrada' mapa cidadeA cidadeB = do
+    let (_, _, estradasB) = getCidade mapa cidadeB
+    print (possuiEstrada' (filter (==cidadeA) estradasB))
+    
+-- Função que retorna os nomes das cidades conectadas a uma cidade por uma estrada
+buscarVizinhos' :: Mapa -> Nome -> IO ()
+buscarVizinhos' mapa cidadeAlvo = do
+    let (_, _, rotas) = getCidade mapa cidadeAlvo
+    print rotas
+
+-- Função que mostra as cidades que aparecem em uma rota entre duas cidades, se houver.
+mostrarRotaEntreCidades' :: Mapa -> Nome -> Nome -> IO ()
+mostrarRotaEntreCidades' mapa cidadeOrigem cidadeDestino = do
+    let (_, _, rotasOrigem) = getCidade mapa cidadeOrigem
+    let (_, _, rotasDestino) = getCidade mapa cidadeDestino
+
+    let rotaComum = filter (`elem` rotasDestino) rotasOrigem
+
+    if null rotaComum
+        then putStrLn $ "Não há rota entre " ++ cidadeOrigem ++ " e " ++ cidadeDestino
+        else putStrLn $ "Cidades na rota entre " ++ cidadeOrigem ++ " e " ++ cidadeDestino
