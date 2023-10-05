@@ -56,13 +56,8 @@ rmvEstrada mapa cidadeAlvo estradaQuePerde = do
 
     print novoMapa
 
-rmvCidade :: IO ()
-rmvCidade = do
-    putStrLn "Informe o nome do arquivo de mapa:"
-    nomeArquivo <- getLine
-    loadMapa <- carregarMapa nomeArquivo
-    putStrLn "Informe a cidade que será removida:"
-    cidadeAlvo <- getLine
+rmvCidade :: Mapa -> Nome -> IO ()
+rmvCidade mapa cidadeAlvo = do
 
     let remover :: Mapa -> Mapa
         remover [] = []
@@ -71,7 +66,7 @@ rmvCidade = do
             | cidade == cidadeAlvo = remover xs
             | otherwise = [(cidade, localizacao, estradas)] ++ remover xs
     
-    let novoMapa = remover loadMapa 
+    let novoMapa = remover mapa 
 
     let tirarEstrada :: Rotas -> Rotas
         tirarEstrada [] = []
@@ -107,38 +102,38 @@ getCidade ((cidade, localizacao, rotas):xs) alvo
     | cidade == alvo = (cidade, localizacao, rotas)
     | otherwise = getCidade xs alvo
 
-euclidiana' :: Localizacao -> Localizacao -> Double
-euclidiana' (xa, ya) (xb, yb) = sqrt(p1 + p2)
+euclidiana :: Localizacao -> Localizacao -> Double
+euclidiana (xa, ya) (xb, yb) = sqrt(p1 + p2)
     where p1 = (xa-xb)^2; p2 = (ya-yb)^2
 
 -- Calcular distância Euclidiana
-distEuclidiana' :: Mapa -> Nome -> Nome -> IO ()
-distEuclidiana' mapa cidadeA cidadeB = do
+distEuclidiana :: Mapa -> Nome -> Nome -> IO ()
+distEuclidiana mapa cidadeA cidadeB = do
     let (_, locA, _) = getCidade mapa cidadeA
     let (_, locB, _) = getCidade mapa cidadeB
 
-    let distancia = euclidiana' locA locB
+    let distancia = euclidiana locA locB
 
     print distancia
 
 -- Verifica se determinada cidade existe nas rotas de outra
-possuiEstrada' :: [String] -> Bool
-possuiEstrada' lista = if length lista > 0 then True else False
+possuiEstrada :: [String] -> Bool
+possuiEstrada lista = if length lista > 0 then True else False
 
-hasEstrada' :: Mapa -> Nome -> Nome -> IO ()
-hasEstrada' mapa cidadeA cidadeB = do
+hasEstrada :: Mapa -> Nome -> Nome -> IO ()
+hasEstrada mapa cidadeA cidadeB = do
     let (_, _, estradasB) = getCidade mapa cidadeB
     print (possuiEstrada' (filter (==cidadeA) estradasB))
     
 -- Função que retorna os nomes das cidades conectadas a uma cidade por uma estrada
-buscarVizinhos' :: Mapa -> Nome -> IO ()
-buscarVizinhos' mapa cidadeAlvo = do
+buscarVizinhos :: Mapa -> Nome -> IO ()
+buscarVizinhos mapa cidadeAlvo = do
     let (_, _, rotas) = getCidade mapa cidadeAlvo
     print rotas
 
 -- Função que mostra as cidades que aparecem em uma rota entre duas cidades, se houver.
-mostrarRotaEntreCidades' :: Mapa -> Nome -> Nome -> IO ()
-mostrarRotaEntreCidades' mapa cidadeOrigem cidadeDestino = do
+mostrarRotaEntreCidades :: Mapa -> Nome -> Nome -> IO ()
+mostrarRotaEntreCidades mapa cidadeOrigem cidadeDestino = do
     let (_, _, rotasOrigem) = getCidade mapa cidadeOrigem
     let (_, _, rotasDestino) = getCidade mapa cidadeDestino
 
