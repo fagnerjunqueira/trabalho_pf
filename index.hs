@@ -98,17 +98,6 @@ rmvCidade mapa cidadeAlvo = do
     salvarMapa novoMapa "saida.mapa"
     print novoMapa
 
-mostrarRotaEntreCidades :: Mapa -> Nome -> Nome -> IO ()
-mostrarRotaEntreCidades mapa cidadeOrigem cidadeDestino = do
-    let (_, _, rotasOrigem) = getCidade mapa cidadeOrigem
-    let (_, _, rotasDestino) = getCidade mapa cidadeDestino
-
-    let rotaComum = filter (`elem` rotasDestino) rotasOrigem
-
-    if null rotaComum
-        then putStrLn $ "Não há rota entre " ++ cidadeOrigem ++ " e " ++ cidadeDestino
-        else putStrLn $ "Cidades na rota entre " ++ cidadeOrigem ++ " e " ++ cidadeDestino ++ ": " ++ show rotaComum
-
 getCidade :: Mapa -> Nome -> Cidade
 getCidade [] _ = error "Não existe no mapa"
 getCidade ((cidade, localizacao, rotas):xs) alvo
@@ -137,9 +126,40 @@ hasEstrada :: Mapa -> Nome -> Nome -> IO ()
 hasEstrada mapa cidadeA cidadeB = do
     let (_, _, estradasB) = getCidade mapa cidadeB
     print (possuiEstrada (filter (==cidadeA) estradasB))
+
+-- Função que, dadas duas cidades, indica se há ou não uma rota entre elas
+haRota :: Mapa -> Nome -> Nome -> IO ()
+haRota mapa cidadeA cidadeB = do
+    let existeRota = verificaRota mapa cidadeA cidadeB
+    print existeRota
+
+-- Verifica se há uma rota entre cidadeA e cidadeB através de cidades intermediárias
+verificaRota :: Mapa -> Nome -> Nome -> Bool
+verificaRota mapa cidadeA cidadeB
+    | cidadeA == cidadeB = True  -- Caso base, que indica que já chegou a cidadeB
+    | otherwise = verificaRotaAux mapa cidadeA cidadeB []
+
+verificaRotaAux :: Mapa -> Nome -> Nome -> [Nome] -> Bool
+verificaRotaAux mapa cidadeA cidadeB visitadas
+    | cidadeA == cidadeB = True  -- Caso base, que indica que já chegou a cidadeB
+    | cidadeA `elem` visitadas = False  -- Caso de parada, para impedir loops infinitos
+    | otherwise = any (\cidade -> verificaRotaAux mapa cidade cidadeB (cidadeA : visitadas)) cidadesAdjacentes
+    where
+        (_, _, cidadesAdjacentes) = getCidade mapa cidadeA
     
 -- Função que retorna os nomes das cidades conectadas a uma cidade por uma estrada
 buscarVizinhos :: Mapa -> Nome -> IO ()
 buscarVizinhos mapa cidadeAlvo = do
     let (_, _, rotas) = getCidade mapa cidadeAlvo
     print rotas
+
+-- Função que, dadas duas cidades, mostra as cidades que aparecem em uma rota entre elas – se houver.
+mostrarRotaEntreCidades :: Mapa -> Nome -> Nome -> IO ()
+mostrarRotaEntreCidades mapa cidadeOrigem cidadeDestino = do
+    let (_, _, rotasOrigem) = getCidade mapa cidadeOrigem
+    let (_, _, rotasDestino) = getCidade mapa cidadeDestino
+
+    let rotaComum = filter (`elem` rotasDestino) rotasOrigem
+    if null rotaComum
+        then putStrLn $ "Não há rota entre " ++ cidadeOrigem ++ " e " ++ cidadeDestino
+        else putStrLn $ "Cidades na rota entre " ++ cidadeOrigem ++ " e " ++ cidadeDestino ++ ": " ++ show rotaComum
