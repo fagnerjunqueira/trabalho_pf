@@ -83,7 +83,7 @@ remove as rotas que a envolvam)
 
 - ~~Função que, dadas duas cidades, calcula a distância euclidiana entre elas~~
 - ~~Função que, dadas duas cidades, indica se há ou não uma estrada entre elas~~
-- Função que, dadas duas cidades, indica se há ou não uma rota entre elas
+- ~~Função que, dadas duas cidades, indica se há ou não uma rota entre elas~~
 - ~~Função que, dada uma cidade, retorna os nomes das cidades conectadas a ela por uma estrada~~
 - ~~Função que, dadas duas cidades, mostra as cidades que aparecem em uma rota entre elas – se houver. Havendo rota, não precisa ser a mais curta.~~
 - Função que, dadas duas cidades, calcula a comprimento da rota entre elas (somatório das distâncias euclidianas entre as cidades que formam a rota)
