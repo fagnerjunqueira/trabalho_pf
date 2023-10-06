@@ -3,18 +3,29 @@ import Mapa
 showMapa :: Mapa
 showMapa = []
 
---Adicionar cidade
+--Valida se cidade ja existe
+cidadeJaCidade :: Mapa -> Nome -> Bool
+cidadeJaCidade mapa cidade = any (\(nome, _, _) -> nome == cidade) mapa
+
+--Valida se coordanada ja existe
+coordenadaJaExiste :: Mapa -> Localizacao -> Bool
+coordenadaJaExiste mapa localizacao = any (\(_, local, _) -> local == localizacao) mapa
+
+--Adicionar cidade'
 adcCidade :: Mapa -> Nome -> Localizacao -> IO ()
 adcCidade mapa cidadeNV localizacao = do
+    let valida :: Bool -> Bool -> String
+        valida True _ = error "Cidade já existe"
+        valida _ True = error "Coordenada já existe"
+        valida _ _ = "Cidade adicionada"
+    
+    print (valida (cidadeJaCidade mapa cidadeNV) (coordenadaJaExiste mapa localizacao))
 
-    let adcCid :: [Cidade]
-        adcCidade [] = []
-        adcCid = [(cidadeNV, localizacao, [])]
-
+    let adcCid = [(cidadeNV, localizacao, [])]
     let novoMapa = mapa ++ adcCid
 
     salvarMapa novoMapa "saida.mapa"
-    
+
     print novoMapa
 
 colocarEstrada :: Nome -> Mapa -> Rotas -> Mapa
@@ -25,7 +36,7 @@ colocarEstrada cidadeQueRecebe ((cidade, localizacao, rotas):xs) novasRotas
 
 adcEstrada :: Mapa -> Nome -> Rotas -> IO ()
 adcEstrada mapa cidadeQueRecebe novasRotas = do
-
+    
     -- Adicionar estrada
     let newMapa = colocarEstrada cidadeQueRecebe mapa novasRotas
 
@@ -86,7 +97,7 @@ rmvCidade mapa cidadeAlvo = do
     
     salvarMapa novoMapa "saida.mapa"
     print novoMapa
-    
+
 mostrarRotaEntreCidades :: Mapa -> Nome -> Nome -> IO ()
 mostrarRotaEntreCidades mapa cidadeOrigem cidadeDestino = do
     let (_, _, rotasOrigem) = getCidade mapa cidadeOrigem
@@ -126,7 +137,7 @@ hasEstrada :: Mapa -> Nome -> Nome -> IO ()
 hasEstrada mapa cidadeA cidadeB = do
     let (_, _, estradasB) = getCidade mapa cidadeB
     print (possuiEstrada (filter (==cidadeA) estradasB))
-
+    
 -- Função que retorna os nomes das cidades conectadas a uma cidade por uma estrada
 buscarVizinhos :: Mapa -> Nome -> IO ()
 buscarVizinhos mapa cidadeAlvo = do
