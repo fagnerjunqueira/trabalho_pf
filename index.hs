@@ -143,9 +143,9 @@ verificaRotaAux :: Mapa -> Nome -> Nome -> [Nome] -> Bool
 verificaRotaAux mapa cidadeA cidadeB visitadas
     | cidadeA == cidadeB = True  -- Caso base, que indica que já chegou a cidadeB
     | cidadeA `elem` visitadas = False  -- Caso de parada, para impedir loops infinitos
-    | otherwise = any (\cidade -> verificaRotaAux mapa cidade cidadeB (cidadeA : visitadas)) cidadesAdjacentes
+    | otherwise = any (\cidade -> verificaRotaAux mapa cidade cidadeB (cidadeA : visitadas)) estradasA
     where
-        (_, _, cidadesAdjacentes) = getCidade mapa cidadeA
+        (_, _, estradasA) = getCidade mapa cidadeA
     
 -- Função que retorna os nomes das cidades conectadas a uma cidade por uma estrada
 buscarVizinhos :: Mapa -> Nome -> IO ()
